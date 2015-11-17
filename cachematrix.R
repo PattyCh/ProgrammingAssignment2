@@ -25,7 +25,7 @@ makeCacheMatrix <- function(x = matrix()) {
       get <- function() x
       setinv <- function(inv) invx <<- inv
       getinv <- function() invx
-      matrix(list(set, get, setinv,getinv),2,2,dimnames=list(c("set","get"),c("orig","inv")))
+      list(set=set, get=get, setinv=setinv,getinv=getinv)
 }
 
 
@@ -46,13 +46,13 @@ cacheSolve <- function(x, ...) {
 ##    x$setmean(m)
 ##    m
 ##  }
-    invx <- x["get","inv"][[1]]()
+    invx <- x$getinv()
     if(!is.null(invx)){
       message("Getting cached matrix")
       return(invx)
     }
-    xmatrix <- x["get","orig"][[1]]()
+    xmatrix <- x$get()
     invx <- solve(xmatrix)
-    x["set","inv"][[1]](invx)
+    x$setinv(invx)
     invx
 }
